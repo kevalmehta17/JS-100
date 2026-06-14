@@ -29,7 +29,13 @@
             <label>Age:</label>
             <input id="age" type="number" required/>
         </div>
-        <button id="saveBtn">Save</button>
+        <div class="btn">
+            <button id="saveBtn" name="saveButton">Save</button>
+            <button id="updateBtn" hidden>Update</button>
+            <button id="delBtn" hidden>Delete</button>
+
+        </div>
+        
 
     </div>
     <hr>
@@ -37,7 +43,7 @@
     <div>
         <label>Select based on ID:</label>
         <select id="selectId">
-            <option>Select Id</option>
+            <option value="">Select Id</option>
         </select>
     </div>
 
