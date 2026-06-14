@@ -14,8 +14,19 @@
   gap: 15px;
 }
 
+.btn{
+    display: flex;
+    gap: 5px;
+    /* flex-direction: column; */
+}
+
+#updateBtn{
+
+}
+
 button {
-  width: 50px;
+  width: 70px;
+  padding-inline: 5px;
 }
 
 .tableDiv{
