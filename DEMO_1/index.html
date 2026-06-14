@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO 1</title>
+    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>DEMO TASK 1</h1>
+    <hr>
+    <hr>
+    <!-- User Form -->
+    <h2>User Form</h2>
+    <div class="parentDiv">
+
+        <div>
+            <label>Name:</label>
+            <input id="name" />
+        </div>
+        <div>
+            <label>City:</label>
+            <input id="city" />
+        </div>
+        <div>
+            <label>Age:</label>
+            <input id="age" />
+        </div>
+        <button id="saveBtn">Save</button>
+
+    </div>
+    <hr>
+    <!-- Select Based on Id -->
+    <div>
+        <label>Select based on ID:</label>
+        <select id="selectId">
+            <option>Select Id</option>
+        </select>
+    </div>
+
+    <!-- Filter -->
+    <div class="filterDiv">
+        <h2>Filters</h2>
+        <div>
+            <label>Select Field:</label>
+            <select id="selectField">
+                <option>Select Field</option>
+            </select>
+        </div>
+        <div>
+            <label>Unique Values:</label>
+            <select id="selectUnique">
+                <option>Select Value</option>
+            </select>
+        </div>
+        <div>
+            <button id="filterBtn">Filter</button>
+            <button id="allBtn">All</button>
+        </div>
+    </div>
+
+    <!-- Table -->
+     <div class="tableDiv">
+        <table id="recordsTable">
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Age</th>
+            </tr>
+        </table>
+     </div>
+
+
+</body>
+
+</html>
