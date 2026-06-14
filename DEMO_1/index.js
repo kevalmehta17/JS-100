@@ -6,11 +6,13 @@ const update = document.getElementById('updateBtn');
 const deleteBtn = document.getElementById('delBtn');
 const selectId = document.getElementById('selectId');
 
-const UserRecords = [];
+let UserRecords = [];
 
 save.addEventListener('click', saveBtn);
 // selectId.addEventListener("click", OptionGenerator);
 selectId.addEventListener('change', userSelectedId);
+update.addEventListener('click', updateBtn);
+deleteBtn.addEventListener('click', DeleteUser);
 
 function OptionGenerator() {
   console.log('again call');
@@ -32,8 +34,8 @@ function userSelectedId() {
   const selectedUserId = parseInt(selectId.value);
   const currentUser = UserRecords.find((user) => user.id === selectedUserId);
   if (!currentUser) {
-      alert('User not found');
-      resetFields();
+    alert('User not found');
+    resetFields();
     return;
   }
   name.value = currentUser.name;
@@ -44,6 +46,8 @@ function userSelectedId() {
   console.log('upd ', update);
   update.removeAttribute('hidden');
   deleteBtn.removeAttribute('hidden');
+
+  return currentUser;
 }
 
 function saveBtn() {
@@ -62,10 +66,41 @@ function saveBtn() {
     age: userAge,
   };
   UserRecords.push(userRecord);
-    console.log('userRecords ', UserRecords);
-    resetFields();
+  console.log('userRecords ', UserRecords);
+  resetFields();
   // To generate new options
   OptionGenerator();
+}
+
+function updateBtn() {
+  const selectedUserId = parseInt(selectId.value);
+  const updatedObj = {
+    name: name.value,
+    city: city.value,
+    age: age.value,
+  };
+
+  UserRecords = UserRecords.map((user) => {
+    if (user.id === selectedUserId) {
+      console.log('returned ', { id: user.id, ...updatedObj });
+      return { id: user.id, ...updatedObj };
+    }
+    return user;
+  });
+  resetFields();
+}
+
+function DeleteUser() {
+  const selectedUserId = parseInt(selectId.value);
+
+  UserRecords = UserRecords.filter((user) => {
+    if (user.id === selectedUserId) {
+      return;
+    }
+    return user;
+  });
+    console.log('after Delete ', UserRecords);
+    resetFields();
 }
 
 function resetFields() {
@@ -75,4 +110,5 @@ function resetFields() {
   save.removeAttribute('hidden');
   update.setAttribute('hidden', true);
   deleteBtn.setAttribute('hidden', true);
+  OptionGenerator();
 }
