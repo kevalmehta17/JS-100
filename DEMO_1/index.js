@@ -5,14 +5,24 @@ const save = document.getElementById('saveBtn');
 const update = document.getElementById('updateBtn');
 const deleteBtn = document.getElementById('delBtn');
 const selectId = document.getElementById('selectId');
+const selectField = document.getElementById('selectField');
+const selectValue = document.getElementById('selectUnique');
 
 let UserRecords = [];
+let selectFields = ['Name', 'City', 'Age'];
 
-save.addEventListener('click', saveBtn);
-// selectId.addEventListener("click", OptionGenerator);
-selectId.addEventListener('change', userSelectedId);
-update.addEventListener('click', updateBtn);
+save.addEventListener('click', SaveBtn);
+selectId.addEventListener('change', UserSelectedId);
+update.addEventListener('click', UpdateBtn);
 deleteBtn.addEventListener('click', DeleteUser);
+selectField.addEventListener('change', SelectUniqueValue);
+
+selectFields.forEach((ele) => {
+  const option = document.createElement('option');
+  option.value = ele.toLowerCase();
+  option.innerText = ele;
+  selectField.appendChild(option);
+});
 
 function OptionGenerator() {
   console.log('again call');
@@ -30,7 +40,7 @@ function OptionGenerator() {
   });
 }
 
-function userSelectedId() {
+function UserSelectedId() {
   const selectedUserId = parseInt(selectId.value);
   const currentUser = UserRecords.find((user) => user.id === selectedUserId);
   if (!currentUser) {
@@ -50,12 +60,12 @@ function userSelectedId() {
   return currentUser;
 }
 
-function saveBtn() {
+function SaveBtn() {
   let userName = name.value;
   let cityName = city.value;
   let userAge = parseInt(age.value);
 
-  if (!userName.trim() || !cityName.trim() || !userAge) {
+  if (!userName.trim() || !cityName.trim() || userAge <= 0) {
     alert('Please Fill out all details');
     return;
   }
@@ -69,10 +79,9 @@ function saveBtn() {
   console.log('userRecords ', UserRecords);
   resetFields();
   // To generate new options
-  OptionGenerator();
 }
 
-function updateBtn() {
+function UpdateBtn() {
   const selectedUserId = parseInt(selectId.value);
   const updatedObj = {
     name: name.value,
@@ -99,8 +108,43 @@ function DeleteUser() {
     }
     return user;
   });
-    console.log('after Delete ', UserRecords);
-    resetFields();
+  console.log('after Delete ', UserRecords);
+  resetFields();
+}
+
+// function SelectedField() {
+//     if (!selectField) {
+//         alert("No Field Selected");
+//         return;
+//     }
+//     selectField = selectField.value;
+// }
+
+function SelectUniqueValue() {
+  selectValue.innerHTML = `<option value="">Select Value</option>`;
+  let selectedField = selectField.value;
+
+  if (selectedField == '') {
+    selectValue.innerHTML = `<option value="">Select Value</option>`;
+    return;
+  }
+
+  const unique = new Set();
+  UserRecords.map((user) => {
+    const val = user[selectedField];
+    if (typeof val === 'string') {
+      unique.add(val.toLowerCase());
+    } else {
+      unique.add(val);
+    }
+  });
+  unique.forEach((ele) => {
+    const option = document.createElement('option');
+    console.log('ele is ', ele);
+    option.value = ele;
+    option.innerText = ele;
+    selectValue.append(option);
+  });
 }
 
 function resetFields() {
@@ -111,4 +155,5 @@ function resetFields() {
   update.setAttribute('hidden', true);
   deleteBtn.setAttribute('hidden', true);
   OptionGenerator();
+  SelectUniqueValue();
 }
