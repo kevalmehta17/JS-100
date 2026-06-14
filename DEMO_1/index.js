@@ -15,7 +15,7 @@ save.addEventListener('click', SaveBtn);
 selectId.addEventListener('change', UserSelectedId);
 update.addEventListener('click', UpdateBtn);
 deleteBtn.addEventListener('click', DeleteUser);
-selectField.addEventListener('change', SelectUniqueValue);
+selectField.addEventListener('change', resetUniqueValue);
 
 selectFields.forEach((ele) => {
   const option = document.createElement('option');
@@ -25,7 +25,6 @@ selectFields.forEach((ele) => {
 });
 
 function OptionGenerator() {
-  console.log('again call');
   const userIds = UserRecords.map((ele) => ele.id);
 
   selectId.innerHTML = '<option>Select Id</option>';
@@ -61,8 +60,8 @@ function UserSelectedId() {
 }
 
 function SaveBtn() {
-  let userName = name.value;
-  let cityName = city.value;
+  let userName = name.value.trim();
+  let cityName = city.value.trim();
   let userAge = parseInt(age.value);
 
   if (!userName.trim() || !cityName.trim() || userAge <= 0) {
@@ -84,18 +83,19 @@ function SaveBtn() {
 function UpdateBtn() {
   const selectedUserId = parseInt(selectId.value);
   const updatedObj = {
-    name: name.value,
-    city: city.value,
-    age: age.value,
+    name: name.value.trim(),
+    city: city.value.trim(),
+    age: parseInt(age.value),
   };
 
   UserRecords = UserRecords.map((user) => {
     if (user.id === selectedUserId) {
-      console.log('returned ', { id: user.id, ...updatedObj });
+      //   console.log('returned ', { id: user.id, ...updatedObj });
       return { id: user.id, ...updatedObj };
     }
     return user;
   });
+  ValueExist();
   resetFields();
 }
 
@@ -109,6 +109,7 @@ function DeleteUser() {
     return user;
   });
   console.log('after Delete ', UserRecords);
+  ValueExist();
   resetFields();
 }
 
@@ -121,30 +122,46 @@ function DeleteUser() {
 // }
 
 function SelectUniqueValue() {
-  selectValue.innerHTML = `<option value="">Select Value</option>`;
   let selectedField = selectField.value;
+  let selectUnique = selectValue.value;
+
+  selectValue.innerHTML = `<option value="">Select Value</option>`;
+  console.log('stored value', selectUnique);
+  if (selectUnique) {
+    console.log('1st ', typeof selectUnique);
+    selectValue.innerHTML = `<option value=${selectUnique}>${selectUnique}</option>`;
+  }
 
   if (selectedField == '') {
+    console.log('selectUnique ', selectUnique);
     selectValue.innerHTML = `<option value="">Select Value</option>`;
     return;
   }
-
   const unique = new Set();
   UserRecords.map((user) => {
     const val = user[selectedField];
-    if (typeof val === 'string') {
+    if (
+      typeof val === 'string' &&
+      val.toLowerCase() !== selectUnique.toLowerCase()
+    ) {
       unique.add(val.toLowerCase());
-    } else {
+    } else if (typeof val === 'number' && val !== parseInt(selectUnique)) {
+      // console.log("inNumber ", typeof val, selectUnique   );
       unique.add(val);
     }
   });
+
   unique.forEach((ele) => {
     const option = document.createElement('option');
-    console.log('ele is ', ele);
     option.value = ele;
     option.innerText = ele;
     selectValue.append(option);
   });
+}
+
+function resetUniqueValue() {
+  selectValue.innerHTML = `<option value="">Select Value</option>`;
+  SelectUniqueValue();
 }
 
 function resetFields() {
@@ -156,4 +173,30 @@ function resetFields() {
   deleteBtn.setAttribute('hidden', true);
   OptionGenerator();
   SelectUniqueValue();
+}
+
+function ValueExist() {
+  const selectedField = selectField.value;
+  const selectUnique = selectValue.value;
+  const isValueExist =
+    selectedField && selectUnique
+      ? UserRecords.some((user) => {
+          if (
+            typeof selectUnique == 'string' &&
+            user[selectedField].toLowerCase() === selectUnique.toLowerCase()
+          ) {
+            return true;
+          } else if (
+            typeof selectUnique === 'number' &&
+            user[selectedField] === selectUnique
+          ) {
+            return true;
+          }
+          return false;
+        })
+      : false;
+
+    if (!isValueExist) {
+        selectValue.innerHTML = `<option value="">Select Value</option>`;
+    }
 }
