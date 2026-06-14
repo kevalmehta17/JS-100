@@ -1,0 +1,27 @@
+*{
+   
+}
+
+.parentDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.filterDiv {
+  display: flex;
+  flex-direction: column;
+  /* padding:2px;   */
+  gap: 15px;
+}
+
+button {
+  width: 50px;
+}
+
+.tableDiv{
+    margin-top: 20px
+}
+
+table,td,th{
+    border: 1px solid black;
+}
