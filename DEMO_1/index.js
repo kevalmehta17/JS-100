@@ -7,8 +7,10 @@ const deleteBtn = document.getElementById('delBtn');
 const selectId = document.getElementById('selectId');
 const selectField = document.getElementById('selectField');
 const selectValue = document.getElementById('selectUnique');
+const filterBtn = document.getElementById('filterBtn');
 
 let UserRecords = [];
+let TableRecords = [];
 let selectFields = ['Name', 'City', 'Age'];
 
 save.addEventListener('click', SaveBtn);
@@ -16,6 +18,7 @@ selectId.addEventListener('change', UserSelectedId);
 update.addEventListener('click', UpdateBtn);
 deleteBtn.addEventListener('click', DeleteUser);
 selectField.addEventListener('change', resetUniqueValue);
+filterBtn.addEventListener('click', FilterRecord);
 
 selectFields.forEach((ele) => {
   const option = document.createElement('option');
@@ -196,7 +199,36 @@ function ValueExist() {
         })
       : false;
 
-    if (!isValueExist) {
-        selectValue.innerHTML = `<option value="">Select Value</option>`;
+  if (!isValueExist) {
+    selectValue.innerHTML = `<option value="">Select Value</option>`;
+  }
+}
+
+function FilterRecord() {
+  const fieldValue = selectField.value;
+  const uniqueValue = selectValue.value;
+
+  if (!fieldValue || !uniqueValue) {
+    alert('Please select the Field & unique value');
+    return;
+  }
+  // #NOTE
+  // .value always convert it back to string in JS
+  // so now we have to directly apply fieldValue bcz typeof don't work
+  // console.log(`type is ${uniqueValue}` , typeof uniqueValue);
+  TableRecords = UserRecords.filter((record) => {
+    if (
+       fieldValue.toLowerCase() !== 'age' &&
+      record[fieldValue].toLowerCase() === uniqueValue.toLowerCase()
+    ) {
+      // console.log('sample is ', record);
+      TableRecords.push(record);
+    } else if (
+      fieldValue.toLowerCase() ===  'age' &&
+      record[fieldValue] == uniqueValue
+    ) {
+      TableRecords.push(record);
     }
+    console.log('TableRecord is ', TableRecords);
+  });
 }
