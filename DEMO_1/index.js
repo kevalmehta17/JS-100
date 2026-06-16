@@ -8,7 +8,9 @@ const selectId = document.getElementById('selectId');
 const selectField = document.getElementById('selectField');
 const selectValue = document.getElementById('selectUnique');
 const filterBtn = document.getElementById('filterBtn');
-const allBtn = document.getElementById("allBtn")
+const allBtn = document.getElementById('allBtn');
+const tableRecord = document.getElementById('tableBody');
+console.log('table ', tableRecord);
 
 let UserRecords = [];
 let TableRecords = [];
@@ -20,7 +22,7 @@ update.addEventListener('click', UpdateBtn);
 deleteBtn.addEventListener('click', DeleteUser);
 selectField.addEventListener('change', resetUniqueValue);
 filterBtn.addEventListener('click', FilterRecord);
-allBtn.addEventListener("click", AllButton);
+allBtn.addEventListener('click', AllButton);
 
 selectFields.forEach((ele) => {
   const option = document.createElement('option');
@@ -82,7 +84,6 @@ function SaveBtn() {
   UserRecords.push(userRecord);
   console.log('userRecords ', UserRecords);
   resetFields();
-  // To generate new options
 }
 
 function UpdateBtn() {
@@ -171,6 +172,7 @@ function resetFields() {
   deleteBtn.setAttribute('hidden', true);
   OptionGenerator();
   SelectUniqueValue();
+  RenderTable();
 }
 
 function ValueExist() {
@@ -213,28 +215,60 @@ function FilterRecord() {
   // console.log(`type is ${uniqueValue}` , typeof uniqueValue);
   TableRecords = UserRecords.filter((record) => {
     if (
-       fieldValue.toLowerCase() !== 'age' &&
+      fieldValue.toLowerCase() !== 'age' &&
       record[fieldValue].toLowerCase() === uniqueValue.toLowerCase()
     ) {
       // console.log('sample is ', record);
       TableRecords.push(record);
     } else if (
-      fieldValue.toLowerCase() ===  'age' &&
+      fieldValue.toLowerCase() === 'age' &&
       record[fieldValue] == uniqueValue
     ) {
       TableRecords.push(record);
     }
     console.log('TableRecord is ', TableRecords);
+    RenderTable(TableRecords);
   });
 }
 
 function AllButton() {
-  selectField.value = "";
-  selectValue.value = "";
+  selectField.value = '';
+  selectValue.value = '';
 
-  console.log("select field ", selectField);
-  console.log("select value ", selectValue);
-  
+  console.log('select field ', selectField);
+  console.log('select value ', selectValue);
+
   TableRecords = UserRecords;
+  RenderTable(TableRecords);
 }
 
+function RenderTable(TableRecords) {
+  tableRecord.innerHTML = '';
+
+  UserRecords = TableRecords ? TableRecords : UserRecords;
+
+  UserRecords.forEach((record) => {
+    console.log('records are ', record);
+    const row = document.createElement('tr');
+    for (const key in record) {
+      console.log('key is ', key);
+      if (key != 'id') {
+        let body = document.createElement('td');
+        body.textContent = record[key];
+        row.append(body);
+      }
+    }
+    tableRecord.append(row);
+
+    // Try and Fail Efforts
+    // const row = document.createElement("tr");
+    // selectFields.forEach((col) => {
+    //   const head = document.createElement("th");
+    //   head.textContent = col;
+    //   row.append(head);
+    // })
+    // tableRecord.append(row);
+    // body.value = "kev";
+    // console.log(row.append(body));
+  });
+}
