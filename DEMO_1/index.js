@@ -8,6 +8,7 @@ const selectId = document.getElementById('selectId');
 const selectField = document.getElementById('selectField');
 const selectValue = document.getElementById('selectUnique');
 const filterBtn = document.getElementById('filterBtn');
+const allBtn = document.getElementById("allBtn")
 
 let UserRecords = [];
 let TableRecords = [];
@@ -19,6 +20,7 @@ update.addEventListener('click', UpdateBtn);
 deleteBtn.addEventListener('click', DeleteUser);
 selectField.addEventListener('change', resetUniqueValue);
 filterBtn.addEventListener('click', FilterRecord);
+allBtn.addEventListener("click", AllButton);
 
 selectFields.forEach((ele) => {
   const option = document.createElement('option');
@@ -90,7 +92,7 @@ function UpdateBtn() {
     city: city.value.trim(),
     age: parseInt(age.value),
   };
-
+  // when we update so we have to update the original array of obj right
   UserRecords = UserRecords.map((user) => {
     if (user.id === selectedUserId) {
       //   console.log('returned ', { id: user.id, ...updatedObj });
@@ -105,6 +107,7 @@ function UpdateBtn() {
 function DeleteUser() {
   const selectedUserId = parseInt(selectId.value);
 
+  // same as upd we have to also delete from the original record array of obj
   UserRecords = UserRecords.filter((user) => {
     if (user.id === selectedUserId) {
       return;
@@ -115,14 +118,6 @@ function DeleteUser() {
   ValueExist();
   resetFields();
 }
-
-// function SelectedField() {
-//     if (!selectField) {
-//         alert("No Field Selected");
-//         return;
-//     }
-//     selectField = selectField.value;
-// }
 
 function SelectUniqueValue() {
   let selectedField = selectField.value;
@@ -232,3 +227,14 @@ function FilterRecord() {
     console.log('TableRecord is ', TableRecords);
   });
 }
+
+function AllButton() {
+  selectField.value = "";
+  selectValue.value = "";
+
+  console.log("select field ", selectField);
+  console.log("select value ", selectValue);
+  
+  TableRecords = UserRecords;
+}
+
